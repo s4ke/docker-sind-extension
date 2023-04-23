@@ -1,0 +1,3 @@
+services:
+  docker-sind:
+    image: ${DESKTOP_PLUGIN_IMAGE}
