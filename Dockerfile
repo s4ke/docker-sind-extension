@@ -22,7 +22,7 @@ RUN --mount=type=cache,target=/usr/src/app/.npm \
 COPY ui /ui
 RUN npm run build
 
-FROM alpine
+FROM docker:stable-dind
 LABEL org.opencontainers.image.title="Swarm in Docker" \
     org.opencontainers.image.description="Docker Extension to run Docker Swarm inside Docker. Simulate a full cluster using Docker" \
     org.opencontainers.image.vendor="s4ke" \
@@ -39,5 +39,6 @@ COPY --from=builder /backend/bin/service /
 COPY docker-compose.yaml .
 COPY metadata.json .
 COPY docker.svg .
+COPY ./scripts/ /scripts
 COPY --from=client-builder /ui/build ui
 CMD /service -socket /run/guest-services/backend.sock

@@ -1,0 +1,54 @@
+services:
+  manager_1:
+    privileged: true
+    image: docker:stable-dind
+    volumes:
+      - ./scripts:/scripts
+    networks:
+      sind:
+        aliases:
+          - manager.1.local
+  
+  manager_2:
+    privileged: true
+    image: docker:stable-dind
+    volumes:
+      - ./scripts:/scripts
+    networks:
+      sind:
+        aliases:
+          - manager.2.local
+  
+  manager_3:
+    privileged: true
+    image: docker:stable-dind
+    volumes:
+      - ./scripts:/scripts
+    networks:
+      sind:
+        aliases:
+          - manager.3.local
+
+  worker_1:
+    privileged: true
+    image: docker:stable-dind
+    volumes:
+      - ./scripts:/scripts
+    networks:
+      sind:
+        aliases:
+          - worker.1.local
+
+  worker_2:
+    privileged: true
+    image: docker:stable-dind
+    volumes:
+      - ./scripts:/scripts
+    networks:
+      sind:
+        aliases:
+          - worker.1.local
+
+networks:
+  sind:
+    driver: bridge

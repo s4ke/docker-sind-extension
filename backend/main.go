@@ -2,10 +2,13 @@ package main
 
 import (
 	"flag"
-	"github.com/labstack/echo/middleware"
+	"fmt"
 	"net"
 	"net/http"
 	"os"
+	"os/exec"
+
+	"github.com/labstack/echo/middleware"
 
 	"github.com/labstack/echo"
 	"github.com/sirupsen/logrus"
@@ -44,7 +47,7 @@ func main() {
 	}
 	router.Listener = ln
 
-	router.GET("/hello", hello)
+	router.GET("/init", initCommand)
 
 	logger.Fatal(router.Start(startURL))
 }
@@ -53,10 +56,21 @@ func listen(path string) (net.Listener, error) {
 	return net.Listen("unix", path)
 }
 
-func hello(ctx echo.Context) error {
-	return ctx.JSON(http.StatusOK, HTTPMessageBody{Message: "hello"})
+func initCommand(ctx echo.Context) error {
+	cmd, err := exec.Command("/bin/sh", "-c", "echo 'toast").Output()
+	if err != nil {
+		fmt.Printf("error %s", err)
+		output := string(cmd)
+		errorString := fmt.Sprintf("error %s", err)
+		return ctx.JSON(http.StatusOK, StartResponse{Output: output, Error: errorString})
+
+	} else {
+		output := string(cmd)
+		return ctx.JSON(http.StatusOK, StartResponse{Output: output})
+	}
 }
 
-type HTTPMessageBody struct {
-	Message string
+type StartResponse struct {
+	Output string
+	Error  string
 }
